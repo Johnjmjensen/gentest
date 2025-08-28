@@ -3,8 +3,6 @@ import './style.css'
 
 const navIndex = `
   <ul id="nav-index">
-    <li><a href="#about" id="link-about">About</a></li>
-    <li><a href="#contact" id="link-contact">Contact</a></li>
     <li><a href="#horse" id="link-horse">Horse</a></li>
   </ul>
 `;
@@ -14,8 +12,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `;
 
 
-import aboutPage from './pages/about';
-import contactPage from './pages/contact';
+// Removed about and contact page imports
 import horsePage from './pages/horse';
 import { generateHorse } from './generators/horse';
 
@@ -38,11 +35,7 @@ function renderPage(page: string) {
   }
   const content = document.getElementById('page-content');
   if (!content) return;
-  if (page === 'about') {
-    content.innerHTML = aboutPage;
-  } else if (page === 'contact') {
-    content.innerHTML = contactPage;
-  } else if (page === 'horse') {
+  if (page === 'horse') {
     content.innerHTML = horsePage;
     const btn = document.getElementById('generate-btn');
     if (btn) {
