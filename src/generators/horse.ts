@@ -7,8 +7,15 @@ export type coat ={
     mark:string
     socks:string
 }
+export type temperament ={
+    temperment:string
+    lazy:boolean
+    bites:boolean
+}
 export type horse ={
     coat:coat
+    temperament:temperament
+    quirk:string
 }
 const getCoat =(): coat =>{
     interface coatData {
@@ -202,10 +209,130 @@ const getCoat =(): coat =>{
     }
     return coat
 }
-
-// let coat = getCoat()
-// console.log(`You ride a ${coat.baseCoat} horse of the ${coat.coatVariety} variety, with a ${coat.mark}`)
-
+export const getTemperament =(): temperament =>{
+    let tempRoll = roller(10) || 1
+    let temperament:temperament = {temperment:'',lazy:false,bites:false}
+    if(tempRoll == 1){
+        temperament.temperment = 'Bomb Proof'
+    }
+    if(tempRoll == 10){
+        temperament.temperment = 'Crazy'
+    }
+    if(tempRoll <= 5){
+        let lazyRoll = roller(20) || 1
+        if(lazyRoll >= 14){
+            temperament.lazy = true
+        }
+        else{
+            temperament.lazy = false
+        }
+    }
+    if(tempRoll >= 8){
+        let biteRoll = roller(20) || 1
+        if(biteRoll <= 5){
+            temperament.bites = true
+        }
+        else{
+            temperament.bites = false
+        }
+    }
+    return temperament
+}
+export const getQuirk =(temperament:temperament): string =>{
+    let quirkRoll = roller(20) || 1
+    let quirk:string = ''
+    switch(quirkRoll){
+        case 1:
+            if(temperament.bites == true){
+                quirk = 'Ripe Hellion.'
+            }
+            else{
+                quirk = 'Perfect People Pleaser.'
+            }
+            break
+        case 2:
+            quirk = 'Follows Well, and keeps up with others. Doesn\'t lead well.'
+            break
+        case 3:
+            quirk = 'wanders off immediately.'
+            break
+        case 4:
+            quirk = 'Likes to stick out tongue even when trotting.'
+            break
+        case 5:
+            quirk = 'Stands still lead by rope, or reigns are in mouth but constantly fidgets if tied.'
+            break
+        case 6:
+            quirk = 'Whinnies shrilly every morning.'
+            break
+        case 7:
+            quirk = 'Starts to walk as soon as rider is off the ground.'
+            break
+        case 8:
+            quirk = 'Leaves trail to spash in puddles. Loves water!'
+            break
+        case 9:
+            quirk = 'Loves scratches between the ears.'
+            break
+        case 10:
+            quirk = 'Loves butt scratches.'
+            break
+        case 11:
+            quirk = 'Likes to lick faberic.'
+            break
+        case 12:
+            let roll = roller(2) || 1
+            if(roll == 1){
+                quirk = 'Able to open stall doors, but doesn\'t leave.'
+            }
+            else{
+                quirk = 'Able to open stall doors, and will wander.'
+            }
+            break
+        case 13:
+            roll = roller(2) || 1
+            if(roll == 1){
+                quirk = 'Able to untie knots, but doesn\'t leave.'
+            }
+            else{
+                quirk = 'Able to untie knots, and will wander.'
+            }
+            break
+        case 14:
+            quirk = 'Is very curious, and will investigate what is going on. This will lead to it getting in the way.'
+            break
+        case 15:
+            quirk = 'Very curious, will watch everything without investigating'
+            break
+        case 16:
+            quirk = 'Constantly snacks while traveling'
+            break
+        case 17:
+            quirk = 'Won\'t move unless both of the riders feet are in stirrups. Checks for this constantly'
+            break
+        case 18:
+            quirk = 'Constantly cuts corners on trails. Will take the lead if able.'
+            break
+        case 19:
+            quirk = 'Will lick the entire face after recieving a treat.'
+            break
+        case 20:
+            quirk = 'Knows tricks, including bowing, nodding, smiling, and hoof on stool.'
+            break
+    }
+    return quirk
+}
+export const getHorse =(): horse =>{
+    let coat:coat = getCoat()
+    let temperament:temperament = getTemperament()
+    let quirk:string = getQuirk(temperament)
+    let horse:horse = {
+        coat:coat,
+        temperament:temperament,
+        quirk:quirk
+    }
+    return horse
+}
 export const getHerd =(horses:number): void =>{
     let i = 0
     while(i<horses){
@@ -214,8 +341,19 @@ export const getHerd =(horses:number): void =>{
         i++
     }
 }
-
 export async function generateHorse(): Promise<string> {
-  let coat:coat = await getCoat()
-  return `🐴 You ride a horse with a ${coat.coatVariety} coat, a ${coat.mark} and ${coat.socks} sock(s)`
+    let horse:horse = getHorse()
+    let horseCoat:string
+    if(horse.coat.baseCoat == horse.coat.coatVariety){
+        horseCoat = `🐴 You ride a horse with a ${horse.coat.coatVariety} coat.`
+    }
+    else{
+        horseCoat = `🐴 You ride a ${horse.coat.baseCoat} horse with a ${horse.coat.coatVariety} coat.`
+    }
+    let socksText = horse.coat.socks == 'No ' || 'No Socks' ? '' : `It has ${horse.coat.socks} sock(s).`
+    let markText = horse.coat.mark == 'No Mark' ? '' : `It has a ${horse.coat.mark}.`
+    let temperText = horse.temperament.temperment == '' ? '': `Its temperament is ${horse.temperament.temperment}.`
+    let biteText = horse.temperament.bites == true ? 'It bites!' : ''
+    let lazyText = horse.temperament.lazy == true ? 'It is lazy.' : ''
+    return `${horseCoat} ${socksText} ${markText} ${temperText} ${biteText} ${lazyText} Its quirk is: ${horse.quirk}`
 }
