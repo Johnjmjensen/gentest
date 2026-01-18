@@ -4,6 +4,7 @@ import './style.css'
 const navIndex = `
   <ul id="nav-index">
     <li><a href="#horse" id="link-horse">Horse</a></li>
+    <li><a href="#secret_gurps" id="link-gurps">GURPS</a></li>
   </ul>
 `;
 
@@ -15,6 +16,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 // Removed about and contact page imports
 import horsePage from './pages/horse';
 import { generateHorse } from './generators/horse';
+import gurpsPage from './pages/gurps';
 
 function renderPage(page: string) {
   const mainContent = document.getElementById('main-content');
@@ -51,6 +53,8 @@ function renderPage(page: string) {
         }
       });
     }
+  } else if (page === 'secret_gurps') {
+    content.innerHTML = gurpsPage;
   } else if (!page) {
     // already handled above
   } else {
